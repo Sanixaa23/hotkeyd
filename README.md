@@ -1,50 +1,52 @@
 # hotkeyd
 
-Bir tuş birleşimine bir program bağla. `Ctrl+Alt+N`'ye bas, Not Defteri açılsın;
-zaten açıksa öne gelsin. Windows için, WPF ile, koyu ve sade bir arayüz.
+Bir tuş birleşimine bir iş bağla. `Ctrl+Alt+N`'e bastığında Not Defteri açılsın;
+zaten açıksa öne gelsin. Windows için, WPF ile yazılmış, buzlu cam görünümlü
+sade bir uygulama.
 
 ![hotkeyd](docs/hotkeyd.png)
 
-Yukarıdaki görüntü programın gerçek bir çalışması: üç kısayol tanımlı, biri
-işletim sistemine kaydedilmiş (**etkin**), biri aynı birleşimi istediği için
-**çakışma**, biri de yazımı bozuk olduğu için **geçersiz**.
+Görseldeki üç satır programın gerçek bir çalışmasından: biri işletim sistemine
+kaydedilmiş ve çalışıyor (**etkin**), biri aynı birleşimi istediği için
+**çakışma** veriyor, biri de yazımı hatalı olduğu için **geçersiz**.
 
-## Söz
+## Verdiği söz
 
-Bir kısayol listede **etkin** görünüyorsa, işletim sistemi onu gerçekten kabul
-etmiştir. Program "kaydettim" demez; `RegisterHotKey` çağrısının sonucuna bakar
-ve sadece Windows evet dediğinde yeşil yakar. Başka bir program o birleşimi
-kapmışsa, o satır kırmızı olur ve nedenini yazar — sessizce yarım çalışmaz.
+Bir kısayol listede **etkin** görünüyorsa, onu işletim sistemi gerçekten kabul
+etmiştir. Program "kaydettim" demekle yetinmez; her kısayol için `RegisterHotKey`
+çağrısının sonucuna bakar ve yalnızca Windows onayladığında yeşil yakar. Başka
+bir uygulama o birleşimi önceden kapmışsa, o satır kırmızıya döner ve nedenini
+yazar. Sessizce yarım çalışan bir kısayol yoktur.
 
-Çakışma da **önceden** çözülür, işletim sistemine dokunmadan. İki açık kısayol
-aynı birleşimi isterse, listede önce gelen onu tutar; geri kalanlar
+Çakışmalar da işletim sistemine hiç dokunmadan, önceden çözülür. Açık iki kısayol
+aynı birleşimi isterse, listede önce gelen birleşimi alır; geri kalanlar
 **çakışma** olarak işaretlenir ve kaydedilmez. Hangi kısayolun sahibi olduğu
-açıkça yazılır, böylece hatayı ararken tahmin etmezsin.
+açıkça yazıldığı için, hatanın kaynağını tahmin etmek zorunda kalmazsın.
 
-## Yalnızca bağladığın tuşları dinler
+## Yalnızca senin bağladığın tuşları dinler
 
-hotkeyd bir tuş kaydedici (keylogger) **değildir** ve öyle olamaz. İşletim
-sisteminin kendi kısayol düzeneğini (`RegisterHotKey`) kullanır: Windows'a
-hangi birleşimleri izleyeceğini söyler, Windows da yalnızca tam olarak o
-birleşimlerden biri basıldığında tek bir mesaj yollar. Program klavyeye kanca
-(hook) takmaz; bağlamadığın hiçbir tuşu görmez, hiçbir yere yazmaz.
+hotkeyd bir tuş kaydedici (keylogger) **değildir**; tasarımı gereği olamaz da.
+İşletim sisteminin kendi kısayol düzeneğini (`RegisterHotKey`) kullanır: Windows'a
+hangi birleşimleri izleyeceğini bildirir, Windows da sadece tam olarak o
+birleşimlerden biri basıldığında tek bir bildirim gönderir. Program klavyeye
+kanca (hook) takmaz; bağlamadığın hiçbir tuşu görmez ve hiçbir yere yazmaz.
 
-Yönetici hakkı da istemez. Kısayollar sıradan bir kullanıcı işlemiyle
-kaydedilir, girişte başlatma da yalnızca o kullanıcı için `HKCU\...\Run`
-anahtarına yazılır.
+Yönetici hakkı da istemez. Kısayollar sıradan bir kullanıcı işlemiyle kaydedilir;
+oturum açılışında başlatma seçeneği de yalnızca o kullanıcıya ait
+`HKCU\...\Run` anahtarına yazar.
 
-## Ne yapar
+## Neler yapabilir
 
-- **Program başlat / öne getir** — yoksa başlatır, varsa penceresini öne alır.
+- **Program başlat / öne getir** — kapalıysa başlatır, açıksa penceresini öne alır.
 - **Dosya veya bağlantı aç** — varsayılan uygulamayla açar.
 - **Komut çalıştır** — bir komut satırı işletir.
 
-Her kısayol tek tek açılıp kapanabilir; üstteki **Tümü** anahtarı hepsini bir
-anda duraklatır (manuel aç/kapa). **Girişte başlat** işaretliyse bilgisayar
-her açıldığında sessizce (`--tray`) devreye girer.
+Her kısayolu tek tek açıp kapatabilirsin. Üstteki **Tümü** anahtarı hepsini bir
+anda duraklatır; istediğinde elle geri açarsın. **Girişte başlat** işaretliyse
+bilgisayar her açıldığında arka planda (`--tray`) sessizce devreye girer.
 
-Tuş birleşimi kutuya yazılmaz; kutuya tıklayıp basılır, böylece saklanan şey
-tam olarak bastığın şeydir.
+Tuş birleşimini kutuya yazmazsın; kutuya tıklayıp birleşime basarsın. Böylece
+kaydedilen şey tam olarak bastığın şey olur.
 
 ## Nasıl çalıştırılır
 
@@ -52,37 +54,38 @@ tam olarak bastığın şeydir.
 dotnet run --project src/hotkeyd.App
 ```
 
-Yayın sürümü (tek klasör):
+Dağıtılabilir sürüm:
 
 ```bash
 dotnet publish src/hotkeyd.App -c Release
 ```
 
-Ayarlar `%APPDATA%\hotkeyd\config.json` içinde tutulur. Dosya elle
-düzenlenebilir; bozuk bir dosya sessizce silinmez, uyarılır — tam da
-düzeltebilmen için program yine de açılır.
+Ayarlar `%APPDATA%\hotkeyd\config.json` dosyasında tutulur. Dosyayı elle de
+düzenleyebilirsin; bozuk bir dosya sessizce silinmez, uyarı verilir ve program
+yine de açılır; zaten düzeltebilmen için.
 
 ## Çekirdek neden ölçülebilir
 
 Karar veren her şey — tuş çözümleme, çakışma bulma, hangi kısayolun
-kaydedileceği — `hotkeyd.Core` içinde saftır: ne pencereye ne klavyeye ihtiyaç
-duyar, aynı girdi hep aynı planı verir. Bu yüzden klavye olmadan baştan sona
-test edilebilir.
+kaydedileceği — `hotkeyd.Core` içinde saf koddur. Ne pencereye ne klavyeye
+ihtiyaç duyar; aynı girdi her zaman aynı planı üretir. Bu yüzden klavye
+olmadan baştan sona sınanabilir.
 
 ```bash
 dotnet test        # 22 test
 ```
 
-- **Çözümleme** her kabul edilen tuş adını tek tek dener, her reddi adıyla
-  ister (boş, tuşsuz, çift değiştirici, iki tuş, bilinmeyen sözcük).
-- **Plan** ilk sahibin birleşimi tuttuğunu, kalanların çakıştığını, kapalı bir
-  kısayolun birleşimi işgal etmediğini ve geçersiz bir satırın sonraki geçerli
-  satırı engellemediğini doğrular.
-- **Ayar deposu** her alanı yazıp geri okur ve bozuk dosyanın kayıtları yok
+- **Çözümleyici** kabul edilen her tuş adını tek tek dener ve her reddi adıyla
+  bildirir: boş giriş, tuşsuz birleşim, tekrar eden değiştirici, iki tuş,
+  tanınmayan sözcük.
+- **Plan** şunları doğrular: birleşimi ilk isteyen sahiplenir, kalanlar çakışır;
+  kapalı bir kısayol birleşimi işgal etmez; geçersiz bir satır, sonraki geçerli
+  satırın kaydını engellemez.
+- **Ayar deposu** her alanı yazıp geri okur ve bozuk bir dosyanın, kayıtları yok
   etmeden hata verdiğini doğrular.
 
-İşletim sistemine dokunan kısım (`RegisterHotKey`, pencere öne getirme) uygulama
-katmanındadır; çekirdek bunu bilmez.
+İşletim sistemine dokunan kısım (`RegisterHotKey`, pencereyi öne getirme)
+uygulama katmanındadır; çekirdek bunu hiç bilmez.
 
 ## Lisans
 

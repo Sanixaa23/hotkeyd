@@ -5,77 +5,104 @@
     <BooleanToVisibilityConverter x:Key="BoolToVis" />
 
     <!--
-        Dark Swiss / minimalist palette, from the design pass: a navy-grey
-        corporate base with a single green accent used only for the "active"
-        signal, nothing decorative. Colours are defined once here and every
-        screen refers to them, so the look cannot drift between windows.
+        Apple-style light "vibrancy". The window itself is the one blurred,
+        translucent layer (a real acrylic backdrop, applied in Backdrop.cs);
+        everything above it is drawn here to read as material floating on that
+        frost, following the design pass:
+
+          One translucent layer, not many stacked. The window is frosted; the
+          list panel on top is a MORE opaque white so text stays crisp. A
+          second faint-on-faint glass would collapse legibility.
+
+          Weight shows hierarchy: the big list panel carries a soft, deep
+          shadow while small chips and buttons stay lighter. Colour is held
+          back to Apple's own system hues, and the green accent is spent only
+          on the one thing it means, a live hotkey. Text over the material is
+          high-contrast, never flat grey on glass.
     -->
-    <Color x:Key="BackgroundColor">#0F172A</Color>
-    <Color x:Key="CardColor">#192134</Color>
-    <Color x:Key="MutedColor">#10192E</Color>
-    <Color x:Key="PrimaryColor">#1E3A5F</Color>
-    <Color x:Key="AccentColor">#22C55E</Color>
-    <Color x:Key="DestructiveColor">#DC2626</Color>
-    <Color x:Key="WarnColor">#F59E0B</Color>
 
-    <SolidColorBrush x:Key="Background" Color="{StaticResource BackgroundColor}" />
-    <SolidColorBrush x:Key="Card" Color="{StaticResource CardColor}" />
-    <SolidColorBrush x:Key="Muted" Color="{StaticResource MutedColor}" />
-    <SolidColorBrush x:Key="Primary" Color="{StaticResource PrimaryColor}" />
-    <SolidColorBrush x:Key="Accent" Color="{StaticResource AccentColor}" />
-    <SolidColorBrush x:Key="Destructive" Color="{StaticResource DestructiveColor}" />
-    <SolidColorBrush x:Key="Warn" Color="{StaticResource WarnColor}" />
-    <SolidColorBrush x:Key="Foreground" Color="#FFFFFF" />
-    <SolidColorBrush x:Key="MutedForeground" Color="#94A3B8" />
-    <SolidColorBrush x:Key="Border" Color="#24314B" />
+    <!-- Apple system colours (light). -->
+    <Color x:Key="BlueColor">#007AFF</Color>
+    <Color x:Key="GreenColor">#34C759</Color>
+    <Color x:Key="RedColor">#FF3B30</Color>
+    <Color x:Key="AmberColor">#FF9F0A</Color>
+    <Color x:Key="GrayColor">#8E8E93</Color>
 
-    <!-- Inter is the intended face; Segoe UI is the honest fallback when it is
-         not installed, rather than pretending a web font ships with the app. -->
-    <FontFamily x:Key="UiFont">Inter, Segoe UI</FontFamily>
+    <SolidColorBrush x:Key="Blue" Color="{StaticResource BlueColor}" />
+    <SolidColorBrush x:Key="Green" Color="{StaticResource GreenColor}" />
+    <SolidColorBrush x:Key="Red" Color="{StaticResource RedColor}" />
+    <SolidColorBrush x:Key="Amber" Color="{StaticResource AmberColor}" />
 
-    <sys:Double x:Key="RadiusSmall">6</sys:Double>
-    <CornerRadius x:Key="CardRadius">10</CornerRadius>
+    <!-- Text: near-black label, secondary grey. Contrast holds over the frost. -->
+    <SolidColorBrush x:Key="Ink" Color="#1C1C1E" />
+    <SolidColorBrush x:Key="Ink2" Color="#54545A" />
+
+    <!-- The single frost tint laid over the acrylic so the window reads light
+         even where the desktop behind it is dark, and still shows as frost if
+         the OS has no acrylic to give. -->
+    <SolidColorBrush x:Key="Frost" Color="#F4F7FB" Opacity="0.55" />
+
+    <!-- The list panel: a near-solid white sheet, the one opaque surface. -->
+    <SolidColorBrush x:Key="Panel" Color="#FFFFFF" Opacity="0.78" />
+    <SolidColorBrush x:Key="PanelEdge" Color="#FFFFFF" Opacity="0.65" />
+    <SolidColorBrush x:Key="Hairline" Color="#1C1C1E" Opacity="0.08" />
+    <SolidColorBrush x:Key="RowHover" Color="#007AFF" Opacity="0.06" />
+    <SolidColorBrush x:Key="Chip" Color="#1C1C1E" Opacity="0.05" />
+
+    <!-- Segoe UI Variable is Windows 11's SF-adjacent system face: it ships the
+         optical sizing and tracking Apple relies on. Plain Segoe UI is the
+         fallback on older systems. -->
+    <FontFamily x:Key="UiFont">Segoe UI Variable Text, Segoe UI</FontFamily>
+    <FontFamily x:Key="DisplayFont">Segoe UI Variable Display, Segoe UI</FontFamily>
+
+    <CornerRadius x:Key="PanelRadius">16</CornerRadius>
+    <CornerRadius x:Key="ControlRadius">10</CornerRadius>
 
     <Style TargetType="{x:Type Window}" x:Key="AppWindow">
-        <Setter Property="Background" Value="{StaticResource Background}" />
+        <Setter Property="Background" Value="Transparent" />
         <Setter Property="FontFamily" Value="{StaticResource UiFont}" />
-        <Setter Property="TextElement.Foreground" Value="{StaticResource Foreground}" />
+        <Setter Property="TextElement.Foreground" Value="{StaticResource Ink}" />
+        <Setter Property="TextOptions.TextFormattingMode" Value="Ideal" />
         <Setter Property="FontSize" Value="14" />
     </Style>
 
+    <!-- Headings take negative tracking as they grow; body sits near zero. -->
     <Style TargetType="TextBlock" x:Key="H1">
-        <Setter Property="FontSize" Value="22" />
+        <Setter Property="FontFamily" Value="{StaticResource DisplayFont}" />
+        <Setter Property="FontSize" Value="26" />
         <Setter Property="FontWeight" Value="SemiBold" />
-        <Setter Property="Foreground" Value="{StaticResource Foreground}" />
+        <Setter Property="Foreground" Value="{StaticResource Ink}" />
     </Style>
 
     <Style TargetType="TextBlock" x:Key="Muted.Text">
-        <Setter Property="Foreground" Value="{StaticResource MutedForeground}" />
+        <Setter Property="Foreground" Value="{StaticResource Ink2}" />
     </Style>
 
-    <!-- Primary button. One accent-weighted action per surface; hover is a
-         200ms lightening, per the motion guidance (subtle, not decorative). -->
+    <!-- Primary action: Apple blue, soft, rounded. Press dips 1px of scale via
+         opacity + a darker fill; hover lifts slightly. -->
     <Style TargetType="Button" x:Key="PrimaryButton">
-        <Setter Property="Background" Value="{StaticResource Primary}" />
-        <Setter Property="Foreground" Value="{StaticResource Foreground}" />
-        <Setter Property="FontWeight" Value="Medium" />
+        <Setter Property="Background" Value="{StaticResource Blue}" />
+        <Setter Property="Foreground" Value="White" />
+        <Setter Property="FontWeight" Value="SemiBold" />
         <Setter Property="Cursor" Value="Hand" />
-        <Setter Property="Padding" Value="16,9" />
-        <Setter Property="BorderThickness" Value="0" />
+        <Setter Property="Padding" Value="18,10" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="Button">
                     <Border x:Name="b" Background="{TemplateBinding Background}"
-                            CornerRadius="{StaticResource CardRadius}"
+                            CornerRadius="{StaticResource ControlRadius}"
                             Padding="{TemplateBinding Padding}">
                         <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
                     </Border>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsMouseOver" Value="True">
-                            <Setter TargetName="b" Property="Background" Value="#2A4D7A" />
+                            <Setter TargetName="b" Property="Background" Value="#0A84FF" />
+                        </Trigger>
+                        <Trigger Property="IsPressed" Value="True">
+                            <Setter TargetName="b" Property="Opacity" Value="0.82" />
                         </Trigger>
                         <Trigger Property="IsEnabled" Value="False">
-                            <Setter TargetName="b" Property="Opacity" Value="0.45" />
+                            <Setter TargetName="b" Property="Opacity" Value="0.4" />
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
@@ -83,23 +110,27 @@
         </Setter>
     </Style>
 
-    <Style TargetType="Button" x:Key="GhostButton" BasedOn="{StaticResource PrimaryButton}">
-        <Setter Property="Background" Value="Transparent" />
-        <Setter Property="Foreground" Value="{StaticResource MutedForeground}" />
-        <Setter Property="Padding" Value="10,7" />
+    <!-- Secondary: a light translucent chip, not an outline. -->
+    <Style TargetType="Button" x:Key="GhostButton">
+        <Setter Property="Background" Value="{StaticResource Chip}" />
+        <Setter Property="Foreground" Value="{StaticResource Ink}" />
+        <Setter Property="FontWeight" Value="Medium" />
+        <Setter Property="Cursor" Value="Hand" />
+        <Setter Property="Padding" Value="13,8" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="Button">
                     <Border x:Name="b" Background="{TemplateBinding Background}"
-                            CornerRadius="{StaticResource CardRadius}"
-                            BorderBrush="{StaticResource Border}" BorderThickness="1"
+                            CornerRadius="{StaticResource ControlRadius}"
                             Padding="{TemplateBinding Padding}">
                         <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
                     </Border>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsMouseOver" Value="True">
-                            <Setter TargetName="b" Property="Background" Value="{StaticResource Muted}" />
-                            <Setter Property="Foreground" Value="{StaticResource Foreground}" />
+                            <Setter TargetName="b" Property="Background" Value="#1F000000" />
+                        </Trigger>
+                        <Trigger Property="IsPressed" Value="True">
+                            <Setter TargetName="b" Property="Opacity" Value="0.7" />
                         </Trigger>
                         <Trigger Property="IsEnabled" Value="False">
                             <Setter TargetName="b" Property="Opacity" Value="0.4" />
@@ -111,12 +142,12 @@
     </Style>
 
     <Style TargetType="TextBox" x:Key="Field">
-        <Setter Property="Background" Value="{StaticResource Muted}" />
-        <Setter Property="Foreground" Value="{StaticResource Foreground}" />
-        <Setter Property="CaretBrush" Value="{StaticResource Foreground}" />
-        <Setter Property="BorderBrush" Value="{StaticResource Border}" />
+        <Setter Property="Background" Value="#FFFFFF" />
+        <Setter Property="Foreground" Value="{StaticResource Ink}" />
+        <Setter Property="CaretBrush" Value="{StaticResource Ink}" />
+        <Setter Property="BorderBrush" Value="{StaticResource Hairline}" />
         <Setter Property="BorderThickness" Value="1" />
-        <Setter Property="Padding" Value="10,8" />
+        <Setter Property="Padding" Value="11,9" />
         <Setter Property="FontSize" Value="14" />
         <Setter Property="Template">
             <Setter.Value>
@@ -124,7 +155,7 @@
                     <Border Background="{TemplateBinding Background}"
                             BorderBrush="{TemplateBinding BorderBrush}"
                             BorderThickness="{TemplateBinding BorderThickness}"
-                            CornerRadius="{StaticResource CardRadius}">
+                            CornerRadius="{StaticResource ControlRadius}">
                         <ScrollViewer x:Name="PART_ContentHost" Margin="{TemplateBinding Padding}" />
                     </Border>
                 </ControlTemplate>
@@ -132,31 +163,39 @@
         </Setter>
     </Style>
 
-    <!-- Toggle styled as a switch: the master on/off and the per-row enable.
-         The track turns accent-green only when on, which is the one place the
-         accent is allowed, so "green" reads as "live" everywhere. -->
+    <!-- iOS-style switch: grey track, white knob, fills Apple green when on. -->
     <Style TargetType="ToggleButton" x:Key="Switch">
         <Setter Property="Cursor" Value="Hand" />
         <Setter Property="Width" Value="46" />
-        <Setter Property="Height" Value="26" />
+        <Setter Property="Height" Value="28" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="ToggleButton">
-                    <Border x:Name="track" Background="{StaticResource Border}"
-                            CornerRadius="13">
-                        <Ellipse x:Name="knob" Width="20" Height="20" Fill="White"
-                                 HorizontalAlignment="Left" Margin="3,0,0,0" />
+                    <Border x:Name="track" Background="#E2E3E7" CornerRadius="14">
+                        <Grid>
+                            <Ellipse x:Name="knob" Width="24" Height="24" Fill="White"
+                                     HorizontalAlignment="Left" Margin="2,0,0,0">
+                                <Ellipse.Effect>
+                                    <DropShadowEffect BlurRadius="4" ShadowDepth="1"
+                                                      Opacity="0.25" Color="#000000" />
+                                </Ellipse.Effect>
+                            </Ellipse>
+                        </Grid>
                     </Border>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsChecked" Value="True">
-                            <Setter TargetName="track" Property="Background" Value="{StaticResource Accent}" />
+                            <Setter TargetName="track" Property="Background" Value="{StaticResource Green}" />
                             <Setter TargetName="knob" Property="HorizontalAlignment" Value="Right" />
-                            <Setter TargetName="knob" Property="Margin" Value="0,0,3,0" />
+                            <Setter TargetName="knob" Property="Margin" Value="0,0,2,0" />
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
     </Style>
+
+    <!-- A soft, deep shadow for the one big surface. -->
+    <DropShadowEffect x:Key="PanelShadow" BlurRadius="34" ShadowDepth="6"
+                      Direction="270" Opacity="0.14" Color="#20304A" />
 
 </ResourceDictionary>

@@ -31,6 +31,12 @@ public partial class BindingEditorWindow : Window
         Validate(null, null);
     }
 
+    protected override void OnSourceInitialized(EventArgs e)
+    {
+        base.OnSourceInitialized(e);
+        Backdrop.Apply(this);
+    }
+
     private void HotkeyBox_GotFocus(object sender, RoutedEventArgs e) =>
         HotkeyHint.Text = "Şimdi bas…";
 

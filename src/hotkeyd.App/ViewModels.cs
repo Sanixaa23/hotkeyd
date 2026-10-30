@@ -91,10 +91,11 @@ public sealed class BindingRowVM : Observable
         Raise(nameof(HasDetail));
     }
 
-    private static readonly Brush Green = Freeze("#22C55E");
-    private static readonly Brush Red = Freeze("#DC2626");
-    private static readonly Brush Amber = Freeze("#F59E0B");
-    private static readonly Brush Gray = Freeze("#64748B");
+    // Apple's system hues, matching the theme.
+    private static readonly Brush Green = Freeze("#34C759");
+    private static readonly Brush Red = Freeze("#FF3B30");
+    private static readonly Brush Amber = Freeze("#FF9F0A");
+    private static readonly Brush Gray = Freeze("#8E8E93");
 
     private static Brush Freeze(string hex)
     {

@@ -6,7 +6,8 @@
         SizeToContent="Height" ResizeMode="NoResize"
         WindowStartupLocation="CenterOwner">
 
-    <StackPanel Margin="24">
+    <Border Background="{StaticResource Frost}">
+    <StackPanel Margin="26">
         <TextBlock Text="Kısayol" Style="{StaticResource H1}" Margin="0,0,0,18" />
 
         <TextBlock Text="Ad" Style="{StaticResource Muted.Text}" Margin="0,0,0,6" />
@@ -50,4 +51,5 @@
             <Button x:Name="SaveButton" Content="Kaydet" Style="{StaticResource PrimaryButton}" Click="Save_Click" />
         </StackPanel>
     </StackPanel>
+    </Border>
 </Window>

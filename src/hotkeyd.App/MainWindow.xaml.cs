@@ -22,6 +22,7 @@ public partial class MainWindow : Window
         base.OnSourceInitialized(e);
         // The host needs a real window handle to receive WM_HOTKEY, which
         // only exists once the source is initialised.
+        Backdrop.Apply(this);
         var source = (HwndSource)PresentationSource.FromVisual(this)!;
         _host = new HotkeyHost(source);
         _vm.AttachHost(_host);

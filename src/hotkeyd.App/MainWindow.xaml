@@ -3,136 +3,145 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:app="clr-namespace:Hotkeyd.App"
         Style="{StaticResource AppWindow}"
-        Title="hotkeyd" Height="640" Width="860"
-        MinHeight="460" MinWidth="680"
+        Title="hotkeyd" Height="660" Width="900"
+        MinHeight="480" MinWidth="720"
         WindowStartupLocation="CenterScreen">
 
-    <Grid Margin="24,20,24,16">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="*" />
-            <RowDefinition Height="Auto" />
-        </Grid.RowDefinitions>
+    <!-- The single frost layer over the acrylic backdrop. -->
+    <Border Background="{StaticResource Frost}">
+        <Grid Margin="28,22,28,18">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
 
-        <!-- Header: identity on the left, the global controls on the right. -->
-        <Grid Grid.Row="0">
-            <StackPanel>
-                <TextBlock Text="hotkeyd" Style="{StaticResource H1}" />
-                <TextBlock Style="{StaticResource Muted.Text}"
-                           Text="Genel kısayollar — bir tuş birleşimine program bağla" />
-            </StackPanel>
-            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center">
-                <StackPanel Margin="0,0,24,0" VerticalAlignment="Center">
-                    <CheckBox Content="Girişte başlat" Foreground="{StaticResource MutedForeground}"
-                              IsChecked="{Binding StartupOn}" />
+            <!-- Header -->
+            <Grid Grid.Row="0">
+                <StackPanel>
+                    <TextBlock Text="hotkeyd" Style="{StaticResource H1}" />
+                    <TextBlock Style="{StaticResource Muted.Text}" Margin="0,2,0,0"
+                               Text="Genel kısayollar — bir tuş birleşimine iş bağla" />
                 </StackPanel>
-                <TextBlock Text="Tümü" VerticalAlignment="Center" Margin="0,0,10,0"
-                           Foreground="{StaticResource MutedForeground}" />
-                <ToggleButton Style="{StaticResource Switch}" IsChecked="{Binding MasterOn}"
-                              VerticalAlignment="Center" />
-            </StackPanel>
-        </Grid>
-
-        <!-- Toolbar -->
-        <Grid Grid.Row="1" Margin="0,20,0,12">
-            <Button Content="+  Kısayol ekle" Style="{StaticResource PrimaryButton}"
-                    HorizontalAlignment="Left" Command="{Binding AddCommand}" />
-            <TextBlock Text="{Binding Summary}" HorizontalAlignment="Right" VerticalAlignment="Center"
-                       Foreground="{StaticResource MutedForeground}" />
-        </Grid>
-
-        <!-- The list of bindings -->
-        <Border Grid.Row="2" Background="{StaticResource Card}"
-                CornerRadius="{StaticResource CardRadius}"
-                BorderBrush="{StaticResource Border}" BorderThickness="1">
-            <Grid>
-                <!-- Empty state -->
-                <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center"
-                            Margin="0,0,0,10">
-                    <StackPanel.Style>
-                        <Style TargetType="StackPanel">
-                            <Setter Property="Visibility" Value="Collapsed" />
-                            <Style.Triggers>
-                                <DataTrigger Binding="{Binding Rows.Count}" Value="0">
-                                    <Setter Property="Visibility" Value="Visible" />
-                                </DataTrigger>
-                            </Style.Triggers>
-                        </Style>
-                    </StackPanel.Style>
-                    <TextBlock Text="Henüz kısayol yok" FontSize="16"
-                               HorizontalAlignment="Center" Foreground="{StaticResource Foreground}" />
-                    <TextBlock Text="&quot;Kısayol ekle&quot; ile başla" Margin="0,6,0,0"
-                               HorizontalAlignment="Center" Foreground="{StaticResource MutedForeground}" />
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center">
+                    <CheckBox Content="Girişte başlat" VerticalAlignment="Center" Margin="0,0,24,0"
+                              Foreground="{StaticResource Ink2}" IsChecked="{Binding StartupOn}" />
+                    <TextBlock Text="Tümü" VerticalAlignment="Center" Margin="0,0,10,0"
+                               Foreground="{StaticResource Ink2}" />
+                    <ToggleButton Style="{StaticResource Switch}" IsChecked="{Binding MasterOn}"
+                                  VerticalAlignment="Center" />
                 </StackPanel>
-
-                <ScrollViewer VerticalScrollBarVisibility="Auto" Padding="6">
-                    <ItemsControl ItemsSource="{Binding Rows}">
-                        <ItemsControl.ItemTemplate>
-                            <DataTemplate DataType="{x:Type app:BindingRowVM}">
-                                <Border Background="{StaticResource Muted}" CornerRadius="8"
-                                        Margin="6,5" Padding="14,11">
-                                    <Grid>
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="Auto" />
-                                            <ColumnDefinition Width="200" />
-                                            <ColumnDefinition Width="*" />
-                                            <ColumnDefinition Width="Auto" />
-                                            <ColumnDefinition Width="Auto" />
-                                        </Grid.ColumnDefinitions>
-
-                                        <ToggleButton Grid.Column="0" Style="{StaticResource Switch}"
-                                                      VerticalAlignment="Center" Margin="0,0,16,0"
-                                                      IsChecked="{Binding Enabled}" />
-
-                                        <StackPanel Grid.Column="1" VerticalAlignment="Center">
-                                            <TextBlock Text="{Binding Label}" FontWeight="Medium"
-                                                       TextTrimming="CharacterEllipsis" />
-                                            <Border Background="{StaticResource Background}" CornerRadius="5"
-                                                    Padding="7,2" Margin="0,4,0,0" HorizontalAlignment="Left">
-                                                <TextBlock Text="{Binding HotkeyText}" FontFamily="Consolas"
-                                                           FontSize="12" Foreground="{StaticResource Foreground}" />
-                                            </Border>
-                                        </StackPanel>
-
-                                        <StackPanel Grid.Column="2" VerticalAlignment="Center" Margin="16,0">
-                                            <TextBlock Text="{Binding ActionDescription}"
-                                                       Foreground="{StaticResource MutedForeground}"
-                                                       TextTrimming="CharacterEllipsis" />
-                                            <TextBlock Text="{Binding Detail}" FontSize="12" Margin="0,3,0,0"
-                                                       Foreground="{StaticResource Warn}"
-                                                       TextWrapping="Wrap"
-                                                       Visibility="{Binding HasDetail, Converter={StaticResource BoolToVis}}" />
-                                        </StackPanel>
-
-                                        <StackPanel Grid.Column="3" Orientation="Horizontal"
-                                                    VerticalAlignment="Center" Margin="10,0,8,0">
-                                            <Ellipse Width="9" Height="9" Fill="{Binding StateBrush}"
-                                                     VerticalAlignment="Center" Margin="0,0,7,0" />
-                                            <TextBlock Text="{Binding StateText}" VerticalAlignment="Center"
-                                                       Foreground="{StaticResource MutedForeground}" />
-                                        </StackPanel>
-
-                                        <StackPanel Grid.Column="4" Orientation="Horizontal" VerticalAlignment="Center">
-                                            <Button Content="Düzenle" Style="{StaticResource GhostButton}"
-                                                    Margin="0,0,8,0"
-                                                    Command="{Binding DataContext.EditCommand, RelativeSource={RelativeSource AncestorType=Window}}"
-                                                    CommandParameter="{Binding}" />
-                                            <Button Content="Sil" Style="{StaticResource GhostButton}"
-                                                    Command="{Binding DataContext.DeleteCommand, RelativeSource={RelativeSource AncestorType=Window}}"
-                                                    CommandParameter="{Binding}" />
-                                        </StackPanel>
-                                    </Grid>
-                                </Border>
-                            </DataTemplate>
-                        </ItemsControl.ItemTemplate>
-                    </ItemsControl>
-                </ScrollViewer>
             </Grid>
-        </Border>
 
-        <TextBlock Grid.Row="3" Margin="2,12,0,0" FontSize="12"
-                   Foreground="{StaticResource MutedForeground}"
-                   Text="hotkeyd yalnızca bağladığın tuş birleşimlerini işletim sisteminden dinler; başka hiçbir tuşu görmez veya kaydetmez." />
-    </Grid>
+            <!-- Toolbar -->
+            <Grid Grid.Row="1" Margin="0,22,0,14">
+                <Button Content="+  Kısayol ekle" Style="{StaticResource PrimaryButton}"
+                        HorizontalAlignment="Left" Command="{Binding AddCommand}" />
+                <TextBlock Text="{Binding Summary}" HorizontalAlignment="Right" VerticalAlignment="Center"
+                           FontWeight="Medium" Foreground="{StaticResource Ink2}" />
+            </Grid>
+
+            <!-- The one opaque surface: the list panel. -->
+            <Border Grid.Row="2" Background="{StaticResource Panel}"
+                    CornerRadius="{StaticResource PanelRadius}"
+                    BorderBrush="{StaticResource PanelEdge}" BorderThickness="1"
+                    Effect="{StaticResource PanelShadow}">
+                <Grid>
+                    <!-- Empty state -->
+                    <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
+                        <StackPanel.Style>
+                            <Style TargetType="StackPanel">
+                                <Setter Property="Visibility" Value="Collapsed" />
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding Rows.Count}" Value="0">
+                                        <Setter Property="Visibility" Value="Visible" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </StackPanel.Style>
+                        <TextBlock Text="Henüz kısayol yok" FontSize="17" FontWeight="SemiBold"
+                                   HorizontalAlignment="Center" Foreground="{StaticResource Ink}" />
+                        <TextBlock Text="&quot;Kısayol ekle&quot; ile başla" Margin="0,6,0,0"
+                                   HorizontalAlignment="Center" Foreground="{StaticResource Ink2}" />
+                    </StackPanel>
+
+                    <ScrollViewer VerticalScrollBarVisibility="Auto" Padding="4,6">
+                        <ItemsControl ItemsSource="{Binding Rows}">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate DataType="{x:Type app:BindingRowVM}">
+                                    <Border x:Name="rowBorder" Background="Transparent"
+                                            BorderBrush="{StaticResource Hairline}"
+                                            BorderThickness="0,0,0,1" Padding="16,13">
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="Auto" />
+                                                <ColumnDefinition Width="210" />
+                                                <ColumnDefinition Width="*" />
+                                                <ColumnDefinition Width="Auto" />
+                                                <ColumnDefinition Width="Auto" />
+                                            </Grid.ColumnDefinitions>
+
+                                            <ToggleButton Grid.Column="0" Style="{StaticResource Switch}"
+                                                          VerticalAlignment="Center" Margin="0,0,18,0"
+                                                          IsChecked="{Binding Enabled}" />
+
+                                            <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                                                <TextBlock Text="{Binding Label}" FontWeight="SemiBold"
+                                                           Foreground="{StaticResource Ink}"
+                                                           TextTrimming="CharacterEllipsis" />
+                                                <Border Background="{StaticResource Chip}" CornerRadius="6"
+                                                        Padding="8,3" Margin="0,5,0,0" HorizontalAlignment="Left">
+                                                    <TextBlock Text="{Binding HotkeyText}" FontSize="12"
+                                                               FontFamily="Cascadia Code, Consolas"
+                                                               Foreground="{StaticResource Ink}" />
+                                                </Border>
+                                            </StackPanel>
+
+                                            <StackPanel Grid.Column="2" VerticalAlignment="Center" Margin="18,0">
+                                                <TextBlock Text="{Binding ActionDescription}"
+                                                           Foreground="{StaticResource Ink2}"
+                                                           TextTrimming="CharacterEllipsis" />
+                                                <TextBlock Text="{Binding Detail}" FontSize="12" Margin="0,3,0,0"
+                                                           Foreground="{StaticResource Amber}" TextWrapping="Wrap"
+                                                           Visibility="{Binding HasDetail, Converter={StaticResource BoolToVis}}" />
+                                            </StackPanel>
+
+                                            <StackPanel Grid.Column="3" Orientation="Horizontal"
+                                                        VerticalAlignment="Center" Margin="10,0,10,0">
+                                                <Ellipse Width="9" Height="9" Fill="{Binding StateBrush}"
+                                                         VerticalAlignment="Center" Margin="0,0,7,0" />
+                                                <TextBlock Text="{Binding StateText}" VerticalAlignment="Center"
+                                                           FontWeight="Medium" Foreground="{StaticResource Ink2}" />
+                                            </StackPanel>
+
+                                            <StackPanel Grid.Column="4" Orientation="Horizontal" VerticalAlignment="Center">
+                                                <Button Content="Düzenle" Style="{StaticResource GhostButton}"
+                                                        Margin="0,0,8,0"
+                                                        Command="{Binding DataContext.EditCommand, RelativeSource={RelativeSource AncestorType=Window}}"
+                                                        CommandParameter="{Binding}" />
+                                                <Button Content="Sil" Style="{StaticResource GhostButton}"
+                                                        Command="{Binding DataContext.DeleteCommand, RelativeSource={RelativeSource AncestorType=Window}}"
+                                                        CommandParameter="{Binding}" />
+                                            </StackPanel>
+                                        </Grid>
+                                    </Border>
+                                    <DataTemplate.Triggers>
+                                        <Trigger SourceName="rowBorder" Property="IsMouseOver" Value="True">
+                                            <Setter TargetName="rowBorder" Property="Background"
+                                                    Value="{StaticResource RowHover}" />
+                                        </Trigger>
+                                    </DataTemplate.Triggers>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </ScrollViewer>
+                </Grid>
+            </Border>
+
+            <TextBlock Grid.Row="3" Margin="4,14,0,0" FontSize="12"
+                       Foreground="{StaticResource Ink2}"
+                       Text="hotkeyd yalnızca bağladığın tuş birleşimlerini işletim sisteminden dinler; başka hiçbir tuşu görmez veya kaydetmez." />
+        </Grid>
+    </Border>
 </Window>
