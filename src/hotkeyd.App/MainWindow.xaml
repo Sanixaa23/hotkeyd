@@ -25,8 +25,9 @@
                                Text="Genel kısayollar — bir tuş birleşimine iş bağla" />
                 </StackPanel>
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center">
-                    <CheckBox Content="Girişte başlat" VerticalAlignment="Center" Margin="0,0,24,0"
-                              Foreground="{StaticResource Ink2}" IsChecked="{Binding StartupOn}" />
+                    <CheckBox Content="Girişte başlat" Style="{StaticResource SoftCheck}"
+                              VerticalAlignment="Center" Margin="0,0,24,0"
+                              IsChecked="{Binding StartupOn}" />
                     <TextBlock Text="Tümü" VerticalAlignment="Center" Margin="0,0,10,0"
                                Foreground="{StaticResource Ink2}" />
                     <ToggleButton Style="{StaticResource Switch}" IsChecked="{Binding MasterOn}"
@@ -103,7 +104,7 @@
                                                            Foreground="{StaticResource Ink2}"
                                                            TextTrimming="CharacterEllipsis" />
                                                 <TextBlock Text="{Binding Detail}" FontSize="12" Margin="0,3,0,0"
-                                                           Foreground="{StaticResource Amber}" TextWrapping="Wrap"
+                                                           Foreground="{StaticResource Ink2}" TextWrapping="Wrap"
                                                            Visibility="{Binding HasDetail, Converter={StaticResource BoolToVis}}" />
                                             </StackPanel>
 

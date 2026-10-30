@@ -194,6 +194,42 @@
         </Setter>
     </Style>
 
+    <!-- Soft checkbox: a rounded square that fills Apple blue with a white
+         tick when on, rather than the hard default Win32 box. -->
+    <Style TargetType="CheckBox" x:Key="SoftCheck">
+        <Setter Property="Cursor" Value="Hand" />
+        <Setter Property="Foreground" Value="{StaticResource Ink2}" />
+        <Setter Property="VerticalContentAlignment" Value="Center" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="CheckBox">
+                    <StackPanel Orientation="Horizontal" Background="Transparent">
+                        <Border x:Name="box" Width="21" Height="21" CornerRadius="7"
+                                Background="#FFFFFF" BorderBrush="{StaticResource Hairline}"
+                                BorderThickness="1.5" VerticalAlignment="Center">
+                            <Path x:Name="tick" Stretch="Uniform" Width="12" Height="12"
+                                  Stroke="White" StrokeThickness="2"
+                                  StrokeStartLineCap="Round" StrokeEndLineCap="Round"
+                                  StrokeLineJoin="Round" Opacity="0"
+                                  Data="M 2,6 L 5,9 L 10,2" />
+                        </Border>
+                        <ContentPresenter Margin="9,0,0,0" VerticalAlignment="Center" />
+                    </StackPanel>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsChecked" Value="True">
+                            <Setter TargetName="box" Property="Background" Value="{StaticResource Blue}" />
+                            <Setter TargetName="box" Property="BorderBrush" Value="{StaticResource Blue}" />
+                            <Setter TargetName="tick" Property="Opacity" Value="1" />
+                        </Trigger>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="box" Property="BorderBrush" Value="{StaticResource Blue}" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
     <!-- A soft, deep shadow for the one big surface. -->
     <DropShadowEffect x:Key="PanelShadow" BlurRadius="34" ShadowDepth="6"
                       Direction="270" Opacity="0.14" Color="#20304A" />
