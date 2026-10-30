@@ -1,0 +1,53 @@
+<Window x:Class="Hotkeyd.App.BindingEditorWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Style="{StaticResource AppWindow}"
+        Title="Kısayol" Height="Auto" Width="520"
+        SizeToContent="Height" ResizeMode="NoResize"
+        WindowStartupLocation="CenterOwner">
+
+    <StackPanel Margin="24">
+        <TextBlock Text="Kısayol" Style="{StaticResource H1}" Margin="0,0,0,18" />
+
+        <TextBlock Text="Ad" Style="{StaticResource Muted.Text}" Margin="0,0,0,6" />
+        <TextBox x:Name="LabelBox" Style="{StaticResource Field}" />
+
+        <TextBlock Text="Tuş birleşimi" Style="{StaticResource Muted.Text}" Margin="0,16,0,6" />
+        <TextBox x:Name="HotkeyBox" Style="{StaticResource Field}" IsReadOnly="True"
+                 PreviewKeyDown="HotkeyBox_PreviewKeyDown"
+                 GotFocus="HotkeyBox_GotFocus" />
+        <TextBlock x:Name="HotkeyHint" FontSize="12" Margin="2,6,0,0"
+                   Foreground="{StaticResource MutedForeground}"
+                   Text="Kutuya tıkla ve istediğin tuş birleşimine bas (ör. Ctrl+Alt+K)." />
+
+        <TextBlock Text="Eylem" Style="{StaticResource Muted.Text}" Margin="0,16,0,6" />
+        <ComboBox x:Name="KindBox" SelectedIndex="0" Height="36"
+                  SelectionChanged="KindBox_SelectionChanged">
+            <ComboBoxItem Content="Programı başlat / öne getir" />
+            <ComboBoxItem Content="Dosya veya bağlantı aç" />
+            <ComboBoxItem Content="Komut çalıştır" />
+        </ComboBox>
+
+        <TextBlock x:Name="TargetLabel" Text="Program yolu" Style="{StaticResource Muted.Text}" Margin="0,16,0,6" />
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+            <TextBox x:Name="TargetBox" Style="{StaticResource Field}"
+                     TextChanged="Validate" />
+            <Button x:Name="BrowseButton" Grid.Column="1" Content="Gözat" Margin="8,0,0,0"
+                    Style="{StaticResource GhostButton}" Click="Browse_Click" />
+        </Grid>
+
+        <StackPanel x:Name="ArgsPanel">
+            <TextBlock Text="Argümanlar (isteğe bağlı)" Style="{StaticResource Muted.Text}" Margin="0,16,0,6" />
+            <TextBox x:Name="ArgsBox" Style="{StaticResource Field}" />
+        </StackPanel>
+
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,24,0,0">
+            <Button Content="İptal" Style="{StaticResource GhostButton}" Margin="0,0,10,0" Click="Cancel_Click" />
+            <Button x:Name="SaveButton" Content="Kaydet" Style="{StaticResource PrimaryButton}" Click="Save_Click" />
+        </StackPanel>
+    </StackPanel>
+</Window>
